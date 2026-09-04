@@ -1,8 +1,8 @@
-# LinqDay1_Task
+# Task2
 
-This repository contains the LinqDay1_Task C# project. Build with dotnet.
+This repository contains the Task2 C# project. Build with dotnet.
 
 Project files:
-- LinqDay1.csproj
+- Task2.csproj
 - program.cs
 

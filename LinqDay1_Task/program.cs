@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EmployeeDepartmentApp
+namespace Task2
 {
     public class Department
     {
