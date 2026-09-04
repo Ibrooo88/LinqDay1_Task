@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="LinqDay1/LinqDay1.csproj" />
+  <Project Path="Task2/Task2.csproj" />
+  <Project Path="LinqDay1_Task/LinqDay1.csproj" />
 </Solution>
