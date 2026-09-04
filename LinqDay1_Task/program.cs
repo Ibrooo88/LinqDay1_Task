@@ -1,89 +1,319 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LinqDay1
+namespace EmployeeDepartmentApp
 {
+    public class Department
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+    }
+
     public class Employee
     {
-        public Employee(int iD, string name, int salary)
-        {
-            ID = iD;
-            Name = name;
-            Salary = salary;
-        }
-
-        public int ID { get; private set; }
-        public string Name { get; private set; }
-        public int Salary { get; private set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Salary { get; set; }
+        public int DepartmentID { get; set; }
     }
 
     internal class Program
     {
+        static List<Department> departments = new List<Department>();
+        static List<Employee> employees = new List<Employee>();
+
         static void Main(string[] args)
         {
-            List<int> numbers = new List<int> { 1, 2, 3, 4, 5, -24, -25, 67, 8, 0, 7, 34, 21, 57, 46, -38 };
+            SeedData();
+            MainMenu();
+        }
 
-            List<Employee> employees = new List<Employee>
+        static void SeedData()
+        {
+            departments.Add(new Department { ID = 1, Name = "IT" });
+            departments.Add(new Department { ID = 2, Name = "HR" });
+            departments.Add(new Department { ID = 3, Name = "Sales" });
+
+            employees.Add(new Employee { ID = 1, Name = "Ahmed", Salary = 15000, DepartmentID = 1 });
+            employees.Add(new Employee { ID = 2, Name = "Mona", Salary = 12000, DepartmentID = 2 });
+            employees.Add(new Employee { ID = 3, Name = "Sara", Salary = 18000, DepartmentID = 3 });
+        }
+
+        static void MainMenu()
+        {
+            bool exit = false;
+            while (!exit)
             {
-                new Employee(1, "Essam", 30000),
-                new Employee(2, "Ahmed", 40000),
-                new Employee(3, "Osama", 30000),
-                new Employee(4, "Maha", 20000),
-                new Employee(5, "Ali", 12000)
-            };
+                Console.WriteLine();
+                Console.WriteLine("==============================");
+                Console.WriteLine("           Main Menu           ");
+                Console.WriteLine("==============================");
+                Console.WriteLine("1 - Employee Management");
+                Console.WriteLine("2 - Department Management");
+                Console.WriteLine("0 - Exit");
+                Console.Write("Choose an option: ");
 
-            Console.WriteLine("---- 1) Aggregate ----");
-            var totalSalaries = employees.Aggregate(0, (acc, emp) => acc + emp.Salary);
-            Console.WriteLine("Total Salaries: " + totalSalaries);
+                string choice = Console.ReadLine();
 
-            Console.WriteLine("\n---- 2) All ----");
-            bool allPositive = numbers.All(n => n > 0);
-            Console.WriteLine("All numbers positive? " + allPositive);
+                switch (choice)
+                {
+                    case "1":
+                        EmployeeMenu();
+                        break;
+                    case "2":
+                        DepartmentMenu();
+                        break;
+                    case "0":
+                        exit = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid option, try again.");
+                        break;
+                }
+            }
+        }
 
-            Console.WriteLine("\n---- 3) Any ----");
-            bool hasHighSalary = employees.Any(emp => emp.Salary > 35000);
-            Console.WriteLine("Any employee salary > 35000? " + hasHighSalary);
-
-            Console.WriteLine("\n---- 4) Append ----");
-            var newNumbers = numbers.Append(100);
-            Console.WriteLine("After Append(100): " + string.Join(", ", newNumbers));
-
-            Console.WriteLine("\n---- 5) Average ----");
-            double avgSalary = employees.Average(emp => emp.Salary);
-            Console.WriteLine("Average Salary: " + avgSalary);
-
-            Console.WriteLine("\n---- 6) Cast ----");
-            ArrayList oldList = new ArrayList { 1, 2, 3, 4 };
-            IEnumerable<int> castedNumbers = oldList.Cast<int>();
-            Console.WriteLine("Casted: " + string.Join(", ", castedNumbers));
-
-            Console.WriteLine("\n---- 7) Chunk ----");
-            var chunks = numbers.Chunk(4);
-            int chunkIndex = 1;
-            foreach (var chunk in chunks)
+        static void EmployeeMenu()
+        {
+            bool back = false;
+            while (!back)
             {
-                Console.WriteLine($"Chunk {chunkIndex++}: " + string.Join(", ", chunk));
+                Console.WriteLine();
+                Console.WriteLine("---- Employee Management ----");
+                Console.WriteLine("1 - View All Employees");
+                Console.WriteLine("2 - Add Employee");
+                Console.WriteLine("3 - Edit Employee");
+                Console.WriteLine("4 - Delete Employee");
+                Console.WriteLine("0 - Back to Main Menu");
+                Console.Write("Choose an option: ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        ViewEmployees();
+                        break;
+                    case "2":
+                        AddEmployee();
+                        break;
+                    case "3":
+                        EditEmployee();
+                        break;
+                    case "4":
+                        DeleteEmployee();
+                        break;
+                    case "0":
+                        back = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid option, try again.");
+                        break;
+                }
+            }
+        }
+
+        static void DepartmentMenu()
+        {
+            bool back = false;
+            while (!back)
+            {
+                Console.WriteLine();
+                Console.WriteLine("---- Department Management ----");
+                Console.WriteLine("1 - View All Departments");
+                Console.WriteLine("2 - Add Department");
+                Console.WriteLine("3 - Edit Department");
+                Console.WriteLine("4 - Delete Department");
+                Console.WriteLine("0 - Back to Main Menu");
+                Console.Write("Choose an option: ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        ViewDepartments();
+                        break;
+                    case "2":
+                        AddDepartment();
+                        break;
+                    case "3":
+                        EditDepartment();
+                        break;
+                    case "4":
+                        DeleteDepartment();
+                        break;
+                    case "0":
+                        back = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid option, try again.");
+                        break;
+                }
+            }
+        }
+
+        static void ViewEmployees()
+        {
+            Console.WriteLine();
+            if (employees.Count == 0)
+            {
+                Console.WriteLine("No employees found.");
+                return;
             }
 
-            Console.WriteLine("\n---- 8) Concat ----");
-            List<int> moreNumbers = new List<int> { 100, 200, 300 };
-            var combined = numbers.Concat(moreNumbers);
-            Console.WriteLine("Combined Count: " + combined.Count());
+            foreach (var emp in employees)
+            {
+                var dept = departments.FirstOrDefault(d => d.ID == emp.DepartmentID);
+                string deptName = dept != null ? dept.Name : "Unknown";
+                Console.WriteLine($"ID: {emp.ID} | Name: {emp.Name} | Salary: {emp.Salary} | Department: {deptName}");
+            }
+        }
 
-            Console.WriteLine("\n---- 9) Contains ----");
-            bool hasNumber = numbers.Contains(67);
-            Console.WriteLine("Contains 67? " + hasNumber);
+        static void AddEmployee()
+        {
+            Console.Write("Enter Employee Name: ");
+            string name = Console.ReadLine();
 
-            Console.WriteLine("\n---- 10) Count ----");
-            int totalCount = numbers.Count();
-            int positiveCount = numbers.Count(n => n > 0);
-            Console.WriteLine("Total Count: " + totalCount);
-            Console.WriteLine("Positive Count: " + positiveCount);
+            Console.Write("Enter Employee Salary: ");
+            int salary = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("\nDone. Press any key to exit...");
-            Console.ReadKey();
+            ViewDepartments();
+            Console.Write("Enter Department ID: ");
+            int deptId = int.Parse(Console.ReadLine());
+
+            if (!departments.Any(d => d.ID == deptId))
+            {
+                Console.WriteLine("Department not found. Employee not added.");
+                return;
+            }
+
+            int newId = employees.Count == 0 ? 1 : employees.Max(e => e.ID) + 1;
+
+            employees.Add(new Employee { ID = newId, Name = name, Salary = salary, DepartmentID = deptId });
+            Console.WriteLine("Employee added successfully.");
+        }
+
+        static void EditEmployee()
+        {
+            Console.Write("Enter Employee ID to edit: ");
+            int id = int.Parse(Console.ReadLine());
+
+            var emp = employees.FirstOrDefault(e => e.ID == id);
+            if (emp == null)
+            {
+                Console.WriteLine("Employee not found.");
+                return;
+            }
+
+            Console.Write($"Enter new Name (current: {emp.Name}): ");
+            string name = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(name))
+                emp.Name = name;
+
+            Console.Write($"Enter new Salary (current: {emp.Salary}): ");
+            string salaryInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(salaryInput))
+                emp.Salary = int.Parse(salaryInput);
+
+            Console.Write($"Enter new Department ID (current: {emp.DepartmentID}): ");
+            string deptInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(deptInput))
+            {
+                int deptId = int.Parse(deptInput);
+                if (departments.Any(d => d.ID == deptId))
+                    emp.DepartmentID = deptId;
+                else
+                    Console.WriteLine("Department not found, keeping old value.");
+            }
+
+            Console.WriteLine("Employee updated successfully.");
+        }
+
+        static void DeleteEmployee()
+        {
+            Console.Write("Enter Employee ID to delete: ");
+            int id = int.Parse(Console.ReadLine());
+
+            var emp = employees.FirstOrDefault(e => e.ID == id);
+            if (emp == null)
+            {
+                Console.WriteLine("Employee not found.");
+                return;
+            }
+
+            employees.Remove(emp);
+            Console.WriteLine("Employee deleted successfully.");
+        }
+
+        static void ViewDepartments()
+        {
+            Console.WriteLine();
+            if (departments.Count == 0)
+            {
+                Console.WriteLine("No departments found.");
+                return;
+            }
+
+            foreach (var dept in departments)
+            {
+                Console.WriteLine($"ID: {dept.ID} | Name: {dept.Name}");
+            }
+        }
+
+        static void AddDepartment()
+        {
+            Console.Write("Enter Department Name: ");
+            string name = Console.ReadLine();
+
+            int newId = departments.Count == 0 ? 1 : departments.Max(d => d.ID) + 1;
+
+            departments.Add(new Department { ID = newId, Name = name });
+            Console.WriteLine("Department added successfully.");
+        }
+
+        static void EditDepartment()
+        {
+            Console.Write("Enter Department ID to edit: ");
+            int id = int.Parse(Console.ReadLine());
+
+            var dept = departments.FirstOrDefault(d => d.ID == id);
+            if (dept == null)
+            {
+                Console.WriteLine("Department not found.");
+                return;
+            }
+
+            Console.Write($"Enter new Name (current: {dept.Name}): ");
+            string name = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(name))
+                dept.Name = name;
+
+            Console.WriteLine("Department updated successfully.");
+        }
+
+        static void DeleteDepartment()
+        {
+            Console.Write("Enter Department ID to delete: ");
+            int id = int.Parse(Console.ReadLine());
+
+            var dept = departments.FirstOrDefault(d => d.ID == id);
+            if (dept == null)
+            {
+                Console.WriteLine("Department not found.");
+                return;
+            }
+
+            bool hasEmployees = employees.Any(e => e.DepartmentID == id);
+            if (hasEmployees)
+            {
+                Console.WriteLine("Cannot delete department, it still has employees assigned to it.");
+                return;
+            }
+
+            departments.Remove(dept);
+            Console.WriteLine("Department deleted successfully.");
         }
     }
 }
