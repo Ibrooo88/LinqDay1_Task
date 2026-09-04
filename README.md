@@ -1,8 +1,1 @@
-# Task2
-
-This repository contains the Task2 C# project. Build with dotnet.
-
-Project files:
-- Task2.csproj
-- program.cs
-
+موجود في الهيستورس تلسك واحد بس مش عارف ارجعه تاني بعد ما رفعت تاسك اتنين بعد تاسك واحد الرجاء من القارء الاطلةع علي الكومنت وهوا اول  تعديل اترفع 
